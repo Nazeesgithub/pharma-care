@@ -43,7 +43,7 @@
     --sidebar-primary-foreground: 0 0% 98%;
 
     --sidebar-accent: 240 4.8% 95.9%;
-
+    
     --sidebar-accent-foreground: 240 5.9% 10%;
 
     --sidebar-border: 220 13% 91%;
@@ -96,6 +96,72 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
   }
+}
+
+@layer utilities {
+  .fade-in {
+    @apply animate-fade-in;
+  }
+  
+  .pill-rotate {
+    @apply animate-pill-rotate;
+  }
+  
+  .hover-elevate {
+    @apply transition-transform duration-300 hover:translate-y-[-4px] hover:shadow-lg;
+  }
+  
+  .pharma-gradient {
+    @apply bg-gradient-to-r from-pharma-primary to-pharma-secondary;
+  }
+  
+  .pharma-gradient-green {
+    @apply bg-gradient-to-r from-pharma-green to-pharma-lightgreen;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pill-rotate {
+  0% {
+    transform: rotate3d(1, 1, 1, 0deg);
+  }
+  100% {
+    transform: rotate3d(1, 1, 1, 360deg);
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out forwards;
+}
+
+.animate-pill-rotate {
+  animation: pill-rotate 8s linear infinite;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
 }
