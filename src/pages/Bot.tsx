@@ -1,8 +1,8 @@
-
 import { useState, useRef, ChangeEvent } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import PillAnimation from '../components/PillAnimation';
+import MedChat from '../components/MedChat';
 
 const Bot = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -27,14 +27,12 @@ const Bot = () => {
     if (selectedFile) {
       setFile(selectedFile);
       
-      // Create a preview URL for image display
       const fileReader = new FileReader();
       fileReader.onload = () => {
         setPreviewUrl(fileReader.result as string);
       };
       fileReader.readAsDataURL(selectedFile);
       
-      // Reset results when a new file is uploaded
       setResults(null);
     }
   };
@@ -42,20 +40,17 @@ const Bot = () => {
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     
-    // Get the dropped file
     const droppedFile = e.dataTransfer.files?.[0] || null;
     
     if (droppedFile) {
       setFile(droppedFile);
       
-      // Create a preview URL for image display
       const fileReader = new FileReader();
       fileReader.onload = () => {
         setPreviewUrl(fileReader.result as string);
       };
       fileReader.readAsDataURL(droppedFile);
       
-      // Reset results when a new file is uploaded
       setResults(null);
     }
   };
@@ -69,9 +64,7 @@ const Bot = () => {
     
     setAnalyzing(true);
     
-    // Simulate API call with setTimeout
     setTimeout(() => {
-      // Mock response data
       const mockResults = {
         medications: [
           {
@@ -142,7 +135,6 @@ const Bot = () => {
     setPreviewUrl(null);
     setResults(null);
     
-    // Reset the file input
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -162,124 +154,132 @@ const Bot = () => {
         </div>
       </section>
       
-      {/* Upload Section */}
+      {/* Main Content Grid */}
       <section className="py-12 px-4 md:px-0">
-        <div className="container mx-auto max-w-5xl">
-          <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-            <div className="grid grid-cols-1 lg:grid-cols-2">
-              {/* Upload Area */}
-              <div className="p-8 md:p-12 order-2 lg:order-1">
-                <h2 className="text-2xl font-bold text-pharma-secondary mb-6">Upload Your Prescription</h2>
-                
-                {!file ? (
-                  <div 
-                    className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-pharma-primary transition-colors"
-                    onClick={() => fileInputRef.current?.click()}
-                    onDrop={handleDrop}
-                    onDragOver={handleDragOver}
-                  >
-                    <svg className="w-16 h-16 text-pharma-gray mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-                    </svg>
-                    <h3 className="text-lg font-semibold text-pharma-secondary mb-2">Drag & Drop or Click to Upload</h3>
-                    <p className="text-pharma-darkgray text-sm mb-4">
-                      Supported file types: JPG, PNG, PDF<br />
-                      Max file size: 5MB
-                    </p>
-                    <button className="px-6 py-2 bg-pharma-primary text-white rounded-lg hover:bg-pharma-secondary transition-colors">
-                      Select File
-                    </button>
-                    <input 
-                      type="file" 
-                      ref={fileInputRef}
-                      className="hidden" 
-                      accept=".jpg,.jpeg,.png,.pdf"
-                      onChange={handleFileChange}
-                    />
-                  </div>
-                ) : (
-                  <div className="mb-8">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-lg font-semibold text-pharma-secondary">File Uploaded</h3>
-                      <button 
-                        onClick={resetUpload}
-                        className="text-pharma-primary hover:text-pharma-secondary"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
+        <div className="container mx-auto max-w-7xl">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Prescription Upload Section */}
+            <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+              <div className="grid grid-cols-1 lg:grid-cols-2">
+                {/* Upload Area */}
+                <div className="p-8 md:p-12 order-2 lg:order-1">
+                  <h2 className="text-2xl font-bold text-pharma-secondary mb-6">Upload Your Prescription</h2>
+                  
+                  {!file ? (
+                    <div 
+                      className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-pharma-primary transition-colors"
+                      onClick={() => fileInputRef.current?.click()}
+                      onDrop={handleDrop}
+                      onDragOver={handleDragOver}
+                    >
+                      <svg className="w-16 h-16 text-pharma-gray mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                      </svg>
+                      <h3 className="text-lg font-semibold text-pharma-secondary mb-2">Drag & Drop or Click to Upload</h3>
+                      <p className="text-pharma-darkgray text-sm mb-4">
+                        Supported file types: JPG, PNG, PDF<br />
+                        Max file size: 5MB
+                      </p>
+                      <button className="px-6 py-2 bg-pharma-primary text-white rounded-lg hover:bg-pharma-secondary transition-colors">
+                        Select File
                       </button>
-                    </div>
-                    
-                    <div className="flex items-center p-4 bg-pharma-gray rounded-lg">
-                      <div className="flex-shrink-0 mr-4">
-                        <svg className="w-8 h-8 text-pharma-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
-                      </div>
-                      <div className="overflow-hidden">
-                        <p className="font-medium text-pharma-secondary truncate">{file.name}</p>
-                        <p className="text-sm text-pharma-darkgray">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
-                      </div>
-                    </div>
-                    
-                    <div className="mt-6">
-                      <button 
-                        onClick={handleAnalyze}
-                        disabled={analyzing}
-                        className={`w-full px-6 py-3 rounded-lg text-white font-semibold ${
-                          analyzing 
-                            ? 'bg-pharma-gray text-pharma-darkgray cursor-not-allowed' 
-                            : 'bg-pharma-primary hover:bg-pharma-secondary transition-colors'
-                        }`}
-                      >
-                        {analyzing ? (
-                          <span className="flex items-center justify-center">
-                            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            Analyzing Prescription...
-                          </span>
-                        ) : "Analyze Prescription"}
-                      </button>
-                    </div>
-                  </div>
-                )}
-                
-                {/* Privacy Notice */}
-                <div className="mt-8 bg-blue-50 text-blue-800 p-4 rounded-lg">
-                  <h3 className="font-semibold mb-2 flex items-center">
-                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    Privacy Notice
-                  </h3>
-                  <p className="text-sm">
-                    Your prescription data is processed securely and is not stored on our servers after analysis. This tool is for informational purposes only and should not replace professional medical advice.
-                  </p>
-                </div>
-              </div>
-              
-              {/* Animation/Preview Area */}
-              <div className="bg-pharma-gray p-8 md:p-12 flex items-center justify-center order-1 lg:order-2">
-                {previewUrl ? (
-                  <div className="w-full">
-                    <h3 className="text-lg font-semibold text-pharma-secondary mb-4">Prescription Preview</h3>
-                    <div className="w-full h-64 bg-white rounded-lg overflow-hidden">
-                      <img 
-                        src={previewUrl} 
-                        alt="Prescription preview" 
-                        className="w-full h-full object-contain"
+                      <input 
+                        type="file" 
+                        ref={fileInputRef}
+                        className="hidden" 
+                        accept=".jpg,.jpeg,.png,.pdf"
+                        onChange={handleFileChange}
                       />
                     </div>
+                  ) : (
+                    <div className="mb-8">
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-lg font-semibold text-pharma-secondary">File Uploaded</h3>
+                        <button 
+                          onClick={resetUpload}
+                          className="text-pharma-primary hover:text-pharma-secondary"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                          </svg>
+                        </button>
+                      </div>
+                      
+                      <div className="flex items-center p-4 bg-pharma-gray rounded-lg">
+                        <div className="flex-shrink-0 mr-4">
+                          <svg className="w-8 h-8 text-pharma-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                          </svg>
+                        </div>
+                        <div className="overflow-hidden">
+                          <p className="font-medium text-pharma-secondary truncate">{file.name}</p>
+                          <p className="text-sm text-pharma-darkgray">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                        </div>
+                      </div>
+                      
+                      <div className="mt-6">
+                        <button 
+                          onClick={handleAnalyze}
+                          disabled={analyzing}
+                          className={`w-full px-6 py-3 rounded-lg text-white font-semibold ${
+                            analyzing 
+                              ? 'bg-pharma-gray text-pharma-darkgray cursor-not-allowed' 
+                              : 'bg-pharma-primary hover:bg-pharma-secondary transition-colors'
+                          }`}
+                        >
+                          {analyzing ? (
+                            <span className="flex items-center justify-center">
+                              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                              </svg>
+                              Analyzing Prescription...
+                            </span>
+                          ) : "Analyze Prescription"}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Privacy Notice */}
+                  <div className="mt-8 bg-blue-50 text-blue-800 p-4 rounded-lg">
+                    <h3 className="font-semibold mb-2 flex items-center">
+                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                      </svg>
+                      Privacy Notice
+                    </h3>
+                    <p className="text-sm">
+                      Your prescription data is processed securely and is not stored on our servers after analysis. This tool is for informational purposes only and should not replace professional medical advice.
+                    </p>
                   </div>
-                ) : (
-                  <div className="w-full h-64">
-                    <PillAnimation size={2.5} color="#0078C8" />
-                  </div>
-                )}
+                </div>
+                
+                {/* Animation/Preview Area */}
+                <div className="bg-pharma-gray p-8 md:p-12 flex items-center justify-center order-1 lg:order-2">
+                  {previewUrl ? (
+                    <div className="w-full">
+                      <h3 className="text-lg font-semibold text-pharma-secondary mb-4">Prescription Preview</h3>
+                      <div className="w-full h-64 bg-white rounded-lg overflow-hidden">
+                        <img 
+                          src={previewUrl} 
+                          alt="Prescription preview" 
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="w-full h-64">
+                      <PillAnimation size={2.5} color="#0078C8" />
+                    </div>
+                  )}
+                </div>
               </div>
+            </div>
+            
+            {/* Chat Section */}
+            <div>
+              <MedChat />
             </div>
           </div>
         </div>
@@ -340,7 +340,7 @@ const Bot = () => {
               <div className="mt-8 bg-yellow-50 text-yellow-800 p-4 rounded-lg">
                 <h3 className="font-semibold mb-2 flex items-center">
                   <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                   </svg>
                   Important Disclaimer
                 </h3>
